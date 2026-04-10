@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 :root {
+  --background: #fafafa;
+  --foreground: #171717;
+  --lobster: #dc2626;
+  --panel: #ffffff;
+  --grid: #e5e5e5;
+  --border: rgba(0, 0, 0, 0.1);
+}
+
+.dark {
   --background: #050505;
   --foreground: #e5e5e5;
   --lobster: #ff2a2a;
@@ -44,7 +53,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -52,7 +61,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff2a2a;
+  background: var(--lobster);
 }
 
 /* Animations */
@@ -171,7 +180,8 @@ body {
 
 /* Selection */
 ::selection {
-  @apply bg-[#ff2a2a] text-white;
+  background-color: var(--lobster);
+  color: white;
 }
 
 /* Border utilities */

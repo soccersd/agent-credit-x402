@@ -15,9 +15,9 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center transition-colors duration-300">
       <div className="text-center">
-        <div className="text-[#ff2a2a] font-mono text-sm animate-pulse mb-4">
+        <div className="text-[var(--lobster)] font-mono text-sm animate-pulse mb-4">
           Initializing AgentCredit x402...
         </div>
         <div className="text-gray-500 font-mono text-xs">

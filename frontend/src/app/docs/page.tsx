@@ -647,7 +647,7 @@ function WalletSection() {
 }
 
 // Code Block Component
-function CodeBlock({ children }: { children: string }) {
+function CodeBlock({ children, id }: { children: string; id?: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -657,8 +657,8 @@ function CodeBlock({ children }: { children: string }) {
   };
 
   return (
-    <div className="relative mb-6">
-      <pre className="bg-[#0a0a0a] border border-white/10 text-gray-300 rounded-lg p-4 overflow-x-auto text-sm font-mono leading-relaxed">
+    <div className="relative mb-6" id={id}>
+      <pre className="bg-[var(--panel)] border border-[var(--border)] text-gray-300 rounded-lg p-4 overflow-x-auto text-sm font-mono leading-relaxed transition-colors duration-300">
         {children}
       </pre>
       <button

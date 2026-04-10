@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 // Icon component - removed, no icons needed
 const Icon = ({ icon, className = "" }: { icon: string; className?: string }) => {
@@ -25,10 +26,10 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#e5e5e5] antialiased selection:bg-[#ff2a2a] selection:text-white">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased transition-colors duration-300">
       {/* Loading Overlay */}
       {isLaunching && (
-        <div className="fixed inset-0 z-[100] bg-[#050505]/95 backdrop-blur-sm flex flex-col items-center justify-center gap-6">
+        <div className="fixed inset-0 z-[100] bg-[var(--background)]/95 backdrop-blur-sm flex flex-col items-center justify-center gap-6">
           <div className="banter-loader">
             <div className="banter-loader__box"></div>
             <div className="banter-loader__box"></div>
@@ -51,7 +52,7 @@ export default function LandingPage() {
       <div className="glow-spot top-[-200px] left-1/2 -translate-x-1/2" />
 
       {/* Status Bar (Top Nav) */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-[#050505]/80 backdrop-blur-md">
+      <nav className="fixed top-0 w-full z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-md transition-colors duration-300">
         <div className="flex md:px-8 h-16 max-w-[1400px] mr-auto ml-auto pr-4 pl-4 items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
@@ -68,7 +69,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4">
             <div className="hidden md:flex gap-6 font-mono text-xs tracking-wide text-gray-400">
               <button
                 onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}
@@ -89,6 +90,7 @@ export default function LandingPage() {
                 DOCS
               </button>
             </div>
+            <ThemeToggle />
           </div>
         </div>
       </nav>
@@ -269,9 +271,9 @@ export default function LandingPage() {
         </div>
 
         {/* Marquee */}
-        <div className="border-y border-white/10 py-6 mb-32 relative bg-black/50">
-          <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-[#050505] to-transparent z-10" />
-          <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-[#050505] to-transparent z-10" />
+        <div className="border-y border-[var(--border)] py-6 mb-32 relative bg-[var(--panel)]/50 transition-colors duration-300">
+          <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-[var(--background)] to-transparent z-10" />
+          <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-[var(--background)] to-transparent z-10" />
           <div className="marquee-container font-mono text-sm text-gray-500 tracking-wider">
             <div className="marquee-content flex items-center gap-16">
               <span>RUST BACKEND</span>
@@ -399,7 +401,7 @@ export default function LandingPage() {
         {/* Economy Loop Visualization */}
         <div
           id="economy"
-          className="grid lg:grid-cols-2 gap-16 items-center mb-32 border border-white/5 bg-[#080808] p-8 md:p-12 rounded-3xl relative overflow-hidden"
+          className="grid lg:grid-cols-2 gap-16 items-center mb-32 border border-[var(--border)] bg-[var(--panel)] p-8 md:p-12 rounded-3xl relative overflow-hidden transition-colors duration-300"
         >
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-b from-[#ff2a2a]/10 to-transparent blur-[100px] pointer-events-none" />
 
@@ -456,7 +458,7 @@ export default function LandingPage() {
           </div>
 
           {/* Abstract Visualization */}
-          <div className="relative h-[400px] w-full bg-[#0a0a0a] rounded-xl border border-white/10 overflow-hidden group">
+          <div className="relative h-[400px] w-full bg-[var(--panel)] rounded-xl border border-[var(--border)] overflow-hidden group transition-colors duration-300">
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-50" />
 
             {/* Nodes */}
@@ -509,7 +511,7 @@ export default function LandingPage() {
         </div>
 
         {/* CTA Section */}
-        <div className="text-center py-24 border-t border-white/10">
+        <div className="text-center py-24 border-t border-[var(--border)] transition-colors duration-300">
           <h2 className="text-4xl md:text-6xl font-medium tracking-tighter text-white mb-6">
             READY TO{" "}
             <span className="text-[#ff2a2a]">DEPLOY?</span>
@@ -537,7 +539,7 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 bg-[#020202]">
+      <footer className="border-t border-[var(--border)] bg-[var(--panel)] transition-colors duration-300">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-12">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-1">
