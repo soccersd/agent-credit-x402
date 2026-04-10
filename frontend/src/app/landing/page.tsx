@@ -11,13 +11,41 @@ const Icon = ({ icon, className = "" }: { icon: string; className?: string }) =>
 export default function LandingPage() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
+  const handleLaunchDashboard = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 1500);
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-[#e5e5e5] antialiased selection:bg-[#ff2a2a] selection:text-white">
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 z-[100] bg-[#050505]/95 backdrop-blur-sm flex flex-col items-center justify-center gap-6">
+          <div className="banter-loader">
+            <div className="banter-loader__box"></div>
+            <div className="banter-loader__box"></div>
+            <div className="banter-loader__box"></div>
+            <div className="banter-loader__box"></div>
+            <div className="banter-loader__box"></div>
+            <div className="banter-loader__box"></div>
+            <div className="banter-loader__box"></div>
+            <div className="banter-loader__box"></div>
+            <div className="banter-loader__box"></div>
+          </div>
+          <div className="text-[#ff2a2a] font-mono text-sm animate-pulse">
+            Initializing AgentCredit x402...
+          </div>
+        </div>
+      )}
+
       {/* Atmospheric Backgrounds */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 bg-tech-grid w-full h-full pointer-events-none z-0" />
       <div className="glow-spot top-[-200px] left-1/2 -translate-x-1/2" />
@@ -103,10 +131,11 @@ export default function LandingPage() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <button
-                onClick={() => router.push("/dashboard")}
-                className="h-14 px-8 btn-primary flex items-center justify-center gap-3"
+                onClick={handleLaunchDashboard}
+                disabled={isLoading}
+                className="h-14 px-8 btn-primary flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Launch Dashboard
+                {isLoading ? "Initializing..." : "Launch Dashboard"}
               </button>
               <button
                 onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}

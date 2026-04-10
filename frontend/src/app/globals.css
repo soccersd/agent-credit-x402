@@ -178,3 +178,126 @@ body {
 .border-border {
   border-color: var(--border);
 }
+
+/* Banter Loader Animation - From Uiverse.io by Nawsome */
+.banter-loader {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.banter-loader__box {
+  width: 20px;
+  height: 20px;
+  background: #ff2a2a;
+  border-radius: 3px;
+  animation: banter-loader-anim 2s infinite;
+}
+
+.banter-loader__box:nth-child(1) {
+  animation-delay: 0.06s;
+}
+
+.banter-loader__box:nth-child(1)::before {
+  animation-delay: 0.54s;
+}
+
+.banter-loader__box:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.banter-loader__box:nth-child(2)::before {
+  animation-delay: 0.6s;
+}
+
+.banter-loader__box:nth-child(3) {
+  animation-delay: 0.18s;
+}
+
+.banter-loader__box:nth-child(3)::before {
+  animation-delay: 0.66s;
+}
+
+.banter-loader__box:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+.banter-loader__box:nth-child(4)::before {
+  animation-delay: 0.72s;
+}
+
+.banter-loader__box:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.banter-loader__box:nth-child(5)::before {
+  animation-delay: 0.78s;
+}
+
+.banter-loader__box:nth-child(6) {
+  animation-delay: 0.36s;
+}
+
+.banter-loader__box:nth-child(6)::before {
+  animation-delay: 0.84s;
+}
+
+.banter-loader__box:nth-child(7) {
+  animation-delay: 0.42s;
+}
+
+.banter-loader__box:nth-child(7)::before {
+  animation-delay: 0.9s;
+}
+
+.banter-loader__box:nth-child(8) {
+  animation-delay: 0.48s;
+}
+
+.banter-loader__box:nth-child(8)::before {
+  animation-delay: 0.96s;
+}
+
+.banter-loader__box:nth-child(9) {
+  animation-delay: 0.54s;
+}
+
+.banter-loader__box:nth-child(9)::before {
+  animation-delay: 1.02s;
+}
+
+.banter-loader__box::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  background: #ff2a2a;
+  animation: banter-loader-anim 2s infinite reverse;
+}
+
+@keyframes banter-loader-anim {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  25% {
+    transform: scale(0.6) rotate(90deg);
+  }
+
+  50% {
+    transform: scale(1) rotate(180deg);
+  }
+
+  75% {
+    transform: scale(0.6) rotate(270deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}

@@ -205,8 +205,8 @@ impl AgentLoop {
                                 state.is_running = false;
                                 state.current_state = AgentState::Idle;
                                 drop(state);
-                                info!("Agent loop stopped by command");
-                                break;
+                                info!("Agent loop stopped by command (can be restarted)");
+                                // Don't break - keep the loop running so we can restart
                             }
                             AgentCommand::TriggerLoop => {
                                 // Force immediate loop iteration
@@ -244,8 +244,6 @@ impl AgentLoop {
                     }
                 }
             }
-
-            info!("Agent loop terminated");
         })
     }
 

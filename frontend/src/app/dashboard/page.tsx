@@ -83,11 +83,19 @@ export default function DashboardPage() {
     });
 
     ws.connect();
-    setWsConnected(ws.isConnected());
+
+    // Wait a bit before checking connection
+    const timer = setTimeout(() => {
+      setWsConnected(ws.isConnected());
+    }, 500);
 
     return () => {
-      ws.disconnect();
-      setWsConnected(false);
+      clearTimeout(timer);
+      // Only disconnect if component is truly unmounting
+      if (wsRef.current === ws) {
+        ws.disconnect();
+        setWsConnected(false);
+      }
     };
   }, [fetchStatus]);
 
