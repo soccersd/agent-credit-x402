@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "skills": {
+    "deployer": {
+      "source": "Uniswap/uniswap-ai",
+      "sourceType": "github",
+      "computedHash": "73b54e9f79855c470fb2e8ea61ff21fab631e19d011c6fdedc27a41fc0c98f8d"
+    },
+    "liquidity-planner": {
+      "source": "Uniswap/uniswap-ai",
+      "sourceType": "github",
+      "computedHash": "42facfb96be928b35effd960093b1b05ee34c9e5254ed3a2086bf25b4d379cae"
+    },
+    "okx-agentic-wallet": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "e9f07088bb1d5483672c1e01122f5f13c5332e37697609448a4dd53af75a4841"
+    },
+    "okx-audit-log": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "d9366f7392d328133a953bc922bdcf5c11daffe2351f63eb7af548e76d114dfd"
+    },
+    "okx-defi-invest": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "65087c337600b1d37282cacea061b1c7400f72ea50a8e919a856f3c613fbad71"
+    },
+    "okx-defi-portfolio": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "5060753fc2b40c3aac830b7bb2e19cc46749add698d0b0c93dbc2120ced0f2a4"
+    },
+    "okx-dex-market": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "e004942bbd9956d12a33a5c10dbd86da64f813b07365eb70f54cb14831834d5d"
+    },
+    "okx-dex-signal": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "3ac630f435a8c809f137462f8685b445fd95450f6d9bde893720293153be20db"
+    },
+    "okx-dex-swap": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "ae458c330f5a048688f71933f27ea42451cb12d8e595138cf422ae293aa214ef"
+    },
+    "okx-dex-token": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "5915478676439032c10dc7cc8e2b829072d95d7be729e6ce3c156a64cf1b7947"
+    },
+    "okx-dex-trenches": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "738387dd30276bbcecd8555a51ebf802e48365c8b5621b1be872752358836a2d"
+    },
+    "okx-dex-ws": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "66d5b3d979a4132dc10f848da8aaa3e08d572bb1361de47064e6653d4418a968"
+    },
+    "okx-onchain-gateway": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "767435ffbc8eadc98d0ab9fe59526313424bb81dc06bf984448bdac10a3f8c1a"
+    },
+    "okx-security": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "cef7f534798f55ddeede81c0bb31bc2e69819e5a9d51815859fb05fff30f12dd"
+    },
+    "okx-wallet-portfolio": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "c3c9024e753ebe946d0f8f00749df3e847a9f0c91187eeb7ad37159d5f5c4794"
+    },
+    "okx-x402-payment": {
+      "source": "okx/onchainos-skills",
+      "sourceType": "github",
+      "computedHash": "ae24c9af6a05bef5a767a2aefee9cf693dc10b736c8cc4e2b0e1466de050acee"
+    },
+    "pay-with-any-token": {
+      "source": "Uniswap/uniswap-ai",
+      "sourceType": "github",
+      "computedHash": "7e8ae15113e4c9e1d32a7d928d8176892a0211cd2520834f78a65b90b6236f68"
+    },
+    "swap-integration": {
+      "source": "Uniswap/uniswap-ai",
+      "sourceType": "github",
+      "computedHash": "3175d202669303732d7147934faedb4a81744e23e5db7c72fae61c2e7bfd7d2c"
+    },
+    "swap-planner": {
+      "source": "Uniswap/uniswap-ai",
+      "sourceType": "github",
+      "computedHash": "976029b4d6ffd2406ba2187e9401017535f88ab444d97e52f1f5b001d8d93b23"
+    },
+    "v4-hook-generator": {
+      "source": "Uniswap/uniswap-ai",
+      "sourceType": "github",
+      "computedHash": "6796284522afe7cb8e8e2fa771a5a5dc0611822da8026361df718ca1d8f3ea09"
+    },
+    "v4-sdk-integration": {
+      "source": "Uniswap/uniswap-ai",
+      "sourceType": "github",
+      "computedHash": "f5a88201d61587d0d7915e9c1e10761c4a9feed10034009bce60841962c2e9a4"
+    },
+    "v4-security-foundations": {
+      "source": "Uniswap/uniswap-ai",
+      "sourceType": "github",
+      "computedHash": "f4d5741e07fcb5e0efabb7700a44e8102b646645b3da2583b823acc9538acf61"
+    },
+    "viem-integration": {
+      "source": "Uniswap/uniswap-ai",
+      "sourceType": "github",
+      "computedHash": "d4ed32df4663a883755039b76f64a85a9a1e4aab0e827ab477ae566c556b4bb6"
+    }
+  }
+}

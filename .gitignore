@@ -1,0 +1,22 @@
+# Generated files
+.qwen/
+1.txt
+final_summary.md
+IMPLEMENTATION_COMPLETE.md
+kill.sh
+PRODUCTION_FEATURES.md
+structure.md
+summary.md
+
+# Backend
+backend/target/
+backend/*.db
+backend/.env
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# OS
+.DS_Store
