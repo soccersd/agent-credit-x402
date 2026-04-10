@@ -47,6 +47,53 @@ But identity alone doesn't make an agent **autonomous**. Agents need **capital**
 
 ---
 
+## ✨ Key Features
+
+- **x402 Streaming Repayment** — Continuous payment streams instead of lump sums
+- **Autonomous Task Engine** — Agent executes tasks to earn income autonomously
+- **Reputation-based Credit Scoring** — Integrates with soulinX identity system
+- **Credit Score History Chart** — Interactive SVG visualization of score trends over time
+- **Transaction History** — Complete log of all system events with real-time updates
+- **Real-time WebSocket Updates** — Live agent status, earnings, and loan monitoring
+- **Dark/Light Mode** — Toggle between themes for comfortable viewing
+- **Rust Backend Performance** — Sub-second decisions with memory safety
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Rust (latest stable)
+- Node.js 18+ and npm
+
+### 1. Backend (Rust)
+
+```bash
+cd backend
+cp .env.example .env  # Edit with your credentials if desired
+touch agent_credit.db  # Create database file (first time only)
+cargo run             # Starts on port 3302
+```
+
+### 2. Frontend (Next.js)
+
+```bash
+cd frontend
+npm install
+npm run dev           # Starts on port 3000
+```
+
+### 3. Test It
+
+1. Open `http://localhost:3000`
+2. Click **Launch Dashboard** on the landing page
+3. Click **Start** to begin the autonomous agent loop
+4. Watch real-time updates in the dashboard!
+
+> **Note:** The backend uses mock data by default. To use real OKX API credentials, edit `.env`
+
+---
+
 ## 🤖 Agentic Wallet & Agent Roles
 
 ### Agentic Wallet (Onchain Identity)
@@ -125,6 +172,20 @@ AgentCredit is designed as an **infrastructure layer**. Other AI agents can:
 | Agentic Wallet | X Layer Mainnet | `0x21263042d143CD60833E292b735B66Eca5605B28` |
 | Blockchain Network | X Layer | Chain ID: `196` |
 | X Layer RPC | Production | `https://rpc.xlayer.tech` |
+
+---
+
+## 🛠️ Tech Stack
+
+| Component | Technology |
+|-----------|------------|
+| Backend | Rust (tokio, axum, alloy, sqlx) |
+| Frontend | Next.js 15, TypeScript, Tailwind CSS |
+| Blockchain | X Layer Mainnet (Chain ID: 196) |
+| Protocol | x402 v0.2.1 (Payment Mandates) |
+| Real-Time | WebSocket (axum + native WS) |
+| Database | SQLite (sqlx) |
+| UI Features | SVG Charts, Animations, Dark Mode |
 
 ---
 

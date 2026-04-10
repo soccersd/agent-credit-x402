@@ -60,6 +60,22 @@ export interface CollateralReport {
   timestamp: string;
 }
 
+export interface CreditScoreHistory {
+  id: number;
+  wallet_address: string;
+  score: number;
+  max_score: number;
+  grade: string;
+  on_chain_history_score: number;
+  portfolio_value_score: number;
+  repayment_history_score: number;
+  reputation_score: number;
+  identity_bonus: number;
+  risk_adjustment: number;
+  max_borrow_limit: number;
+  created_at: string;
+}
+
 export interface AgentStatus {
   current_state: string;
   is_running: boolean;
@@ -132,6 +148,11 @@ export async function getCollateralReport(): Promise<ApiResponse<CollateralRepor
 
 export async function checkHealth(): Promise<ApiResponse<string>> {
   const response = await apiClient.get<ApiResponse<string>>('/api/health');
+  return response.data;
+}
+
+export async function getCreditScoreHistory(): Promise<ApiResponse<CreditScoreHistory[]>> {
+  const response = await apiClient.get<ApiResponse<CreditScoreHistory[]>>('/api/credit_score/history');
   return response.data;
 }
 

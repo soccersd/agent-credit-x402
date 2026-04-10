@@ -274,7 +274,10 @@ function IntroductionSection() {
           "x402 Streaming Repayment — Continuous payment streams, not lump sums",
           "Autonomous Task Engine — Agent executes tasks to earn income autonomously",
           "Reputation-based Credit Scoring — Integrates with soulinX identity system",
+          "Credit Score History Chart — Visual chart showing score trends over time",
+          "Transaction History — Complete log of all system events and operations",
           "Real-time WebSocket Updates — Live agent status, earnings, loan updates",
+          "Dark/Light Mode — Toggle between themes for comfortable viewing",
           "Rust Backend Performance — Sub-second decisions, memory safe",
         ].map((feature, i) => (
           <li key={i} className="flex items-start gap-3">
@@ -305,6 +308,7 @@ function IntroductionSection() {
               ["Protocol", "x402 v0.2.1 (Payment Mandates)"],
               ["Real-Time", "WebSocket (axum + native WS)"],
               ["Database", "SQLite (sqlx)"],
+              ["UI Features", "SVG Charts, Animations, Dark Mode"],
             ].map(([comp, tech], i) => (
               <tr key={i} className="hover:bg-white/5 transition-colors">
                 <td className="py-3 px-4 text-sm text-white border border-white/10 font-medium">{comp}</td>
@@ -372,6 +376,25 @@ function ArchitectureSection() {
           { name: "Collateral Manager", file: "collateral_mgr.rs", desc: "Real-time collateral monitoring and rebalancing" },
           { name: "Liquidator", file: "liquidator.rs", desc: "Liquidation detection and forced position closure" },
           { name: "Reputation Engine", file: "reputation_engine.rs", desc: "Integration with soulinX, ENS, and other identity systems" },
+        ].map((comp, i) => (
+          <div key={i} className="border border-white/10 rounded-lg p-4 hover:border-[#ff2a2a]/50 transition-colors bg-[#0a0a0a]/50">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="font-semibold text-white">{comp.name}</span>
+              <code className="text-xs bg-white/5 px-1.5 py-0.5 rounded text-gray-500">{comp.file}</code>
+            </div>
+            <p className="text-gray-400 text-sm mt-1">{comp.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-semibold text-white mt-10 mb-4">Frontend Components</h2>
+      <div className="space-y-4 mb-8">
+        {[
+          { name: "Credit Score Chart", file: "CreditScoreChart.tsx", desc: "Interactive SVG line chart showing credit score history with tooltips and trend indicators" },
+          { name: "Transaction History", file: "TransactionHistory.tsx", desc: "Scrollable list of all system events with status badges and timestamps" },
+          { name: "Loan Manager", file: "LoanManager.tsx", desc: "Form-based UI for creating and managing loans with validation" },
+          { name: "Theme Toggle", file: "ThemeToggle.tsx", desc: "Dark/Light mode switcher with smooth transitions" },
+          { name: "Animated Counter", file: "AnimatedCounter.tsx", desc: "Animated number transitions for statistics display" },
         ].map((comp, i) => (
           <div key={i} className="border border-white/10 rounded-lg p-4 hover:border-[#ff2a2a]/50 transition-colors bg-[#0a0a0a]/50">
             <div className="flex items-center gap-2 mb-1">
@@ -605,7 +628,15 @@ function WalletSection() {
         Agentic Wallet configuration and security features.
       </p>
 
-      <h2 className="text-2xl font-semibold text-white mt-10 mb-4">Wallet Info</h2>
+      <div className="bg-[#ff2a2a]/5 border-l-2 border-[#ff2a2a] p-4 mb-8 rounded-r">
+        <p className="text-[#ff2a2a] text-sm font-medium">Note</p>
+        <p className="text-gray-400 text-sm mt-1">
+          The dashboard does not include wallet connection UI (MetaMask/WalletConnect). 
+          All wallet operations are handled by the backend agent using a pre-configured wallet address.
+        </p>
+      </div>
+
+      <h2 className="text-2xl font-semibold text-white mt-10 mb-4">Backend Wallet Info</h2>
       <div className="bg-[#0a0a0a] border border-white/10 rounded-lg p-4 mb-8 space-y-2">
         {[
           ["Address", "0x21263042d143CD60833E292b735B66Eca5605B28"],
@@ -628,6 +659,7 @@ function WalletSection() {
           "JWT Authentication (optional, disabled by default)",
           "CORS restriction to frontend URL",
           "SQLite persistence across restarts",
+          "Backend-only wallet operations (no frontend key exposure)",
         ].map((item, i) => (
           <li key={i} className="flex items-start gap-3">
             <span className="mt-2 w-1.5 h-1.5 bg-[#ff2a2a] rounded-full flex-shrink-0" />

@@ -1,0 +1,73 @@
+แนะนำการปรับปรุง Dashboard
+🔥 สำคัญสำหรับ Hackathon Demo (ควรทำ)
+1. Credit Score Visualization Chart
+เพิ่ม กราฟแสดง Credit Score ย้อนหลัง (line chart)
+แสดง trend การเปลี่ยนแปลง score ตั้งแต่เริ่มต้น
+ทำให้กรรมการเห็นพัฒนาการของ agent
+ทำไมสำคัญ: Demo จะดูมีข้อมูลและน่าตื่นเต้นขึ้นมาก
+2. Agent Activity Timeline/Log
+เพิ่ม real-time activity log แสดง actions ที่ agent ทำ
+ตัวอย่าง:
+plaintext
+14:30:02 - ✅ Credit Score Calculated: 750 (Grade A)
+14:30:05 - 💰 Loan Created: 5 USDC
+14:30:15 - 🔄 Task Completed: Earned 0.5 USDC
+14:30:20 - 💸 Repayment: 0.3 USDC streamed
+ทำไมสำคัญ: ทำให้เห็นว่า agent ทำงาน autonomously จริงๆ
+3. Network/Chain Selector
+เพิ่ม dropdown เลือก network (X Layer, Base, Ethereum)
+แสดงว่าโปรเจกต์ support หลาย chains
+ทำไมสำคัญ: โชว์ flexibility และตรงกับ requirement
+⭐ Medium Priority (ทำถ้ามีเวลา)
+4. Collateral Health Indicator
+เพิ่ม gauge/meter แสดง collateralization ratio
+สีเขียว/เหลือง/แดง ตามระดับความเสี่ยง
+แจ้งเตือนก่อนจะถูก liquidate
+5. Earnings Chart
+กราฟแสดงรายได้สะสม over time
+แยกตาม task types
+แสดง repayment vs earnings
+6. Agent Performance Metrics
+เพิ่ม cards แสดง:
+Total Loans Completed
+Average Repayment Time
+Default Rate
+ROI (Return on Investment)
+7. Quick Actions Panel
+เพิ่ม shortcuts สำหรับ:
+"Calculate Credit Score"
+"Run Earning Task"
+"Emergency Repay All"
+"Export Data"
+💡 Nice to Have (ถ้าเหลือเวลา)
+8. Wallet Connection
+ปุ่ม connect wallet (MetaMask/WalletConnect)
+แสดง balance จาก wallet จริง
+ทำให้ดูเป็น production-ready
+9. Notifications System
+Toast notifications สำหรับ events:
+Loan created
+Repayment completed
+Collateral alert
+Liquidation warning
+10. Dark/Light Mode Preview
+เพิ่มปุ่มสลับ theme ที่เห็นชัดเจนขึ้น
+ทำให้ demo ดู polished
+🎬 แนะนำสำหรับ Demo Video (1-3 นาที)
+Script ที่แนะนำ:
+plaintext
+0:00-0:15  → Intro: แสดง Landing Page + อธิบาย concept
+0:15-0:30  → Dashboard Overview: แสดง UI ทั้งหมด
+0:30-0:45  → Credit Score: แสดงการคำนวณ score
+0:45-1:15  → Create Loan: สร้าง loan ใหม่ + แสดง x402 mandate
+1:15-1:45  → Autonomous Loop: กด Start → แสดง agent ทำงานเอง
+1:45-2:15  → Real-time Updates: WebSocket updates + Transaction history
+2:15-2:45  → Repayment: แสดง streaming repayment + credit score เพิ่มขึ้น
+2:45-3:00  → Summary + GitHub link
+🏆 ลำดับความสำคัญที่ผมแนะนำ:
+Activity Timeline/Log ⭐⭐⭐ (สำคัญสุดสำหรับ demo)
+Credit Score History Chart ⭐⭐⭐ (ทำให้ดูมีข้อมูล)
+Network Selector ⭐⭐ (โชว์ multi-chain)
+Collateral Health ⭐⭐ (เพิ่มความน่าตื่นเต้น)
+Earnings Chart ⭐ (nice to have)
+คุณอยากให้ผมช่วย implement ตัวไหนก่อนไหมครับ? ผมแนะนำให้ทำ Activity Timeline ก่อน เพราะจะทำให้ Demo Video น่าประทับใจมาก! 🚀

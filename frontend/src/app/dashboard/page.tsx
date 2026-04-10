@@ -17,6 +17,7 @@ import {
 import CreditScoreCard from "@/components/CreditScoreCard";
 import LoanManager from "@/components/LoanManager";
 import TransactionHistory, { Transaction } from "@/components/TransactionHistory";
+import CreditScoreChart from "@/components/CreditScoreChart";
 import { SpinnerOverlay } from "@/components/ui/Spinner";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -28,8 +29,10 @@ import {
   createLoan,
   repayLoan,
   cancelLoan,
+  getCreditScoreHistory,
   AgentStatus,
   ActiveLoan,
+  CreditScoreHistory,
 } from "@/lib/api";
 import { BACKEND_WS_URL } from "@/lib/constants";
 import { getWebSocketInstance, WebSocketMessage } from "@/lib/websocket";
@@ -86,6 +89,8 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [backendOnline, setBackendOnline] = useState(false);
   const [wsConnected, setWsConnected] = useState(false);
+  const [creditHistory, setCreditHistory] = useState<CreditScoreHistory[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const wsRef = useRef<ReturnType<typeof getWebSocketInstance> | null>(null);
 
   const fetchStatus = useCallback(async () => {
@@ -109,6 +114,20 @@ export default function DashboardPage() {
     }
   }, []);
 
+  const fetchCreditHistory = useCallback(async () => {
+    try {
+      setIsLoadingHistory(true);
+      const response = await getCreditScoreHistory();
+      if (response.success) {
+        setCreditHistory(response.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch credit history:", err);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  }, []);
+
   useEffect(() => {
     const ws = getWebSocketInstance(BACKEND_WS_URL);
     wsRef.current = ws;
@@ -122,7 +141,10 @@ export default function DashboardPage() {
     });
 
     ws.on("state_changed", () => fetchStatus());
-    ws.on("credit_scored", () => fetchStatus());
+    ws.on("credit_scored", () => {
+      fetchStatus();
+      fetchCreditHistory();
+    });
     ws.on("loan_created", () => fetchStatus());
     ws.on("loan_repaid", () => fetchStatus());
     ws.on("collateral_alert", () => fetchStatus());
@@ -148,7 +170,8 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchStatus();
-  }, [fetchStatus]);
+    fetchCreditHistory();
+  }, [fetchStatus, fetchCreditHistory]);
 
   useEffect(() => {
     const interval = setInterval(fetchStatus, 60000);
@@ -338,6 +361,12 @@ export default function DashboardPage() {
               score={status?.credit_score || null}
               isLoading={false}
               onRefresh={fetchStatus}
+            />
+
+            {/* Credit Score History Chart */}
+            <CreditScoreChart
+              history={creditHistory}
+              isLoading={isLoadingHistory}
             />
 
             {/* Agent Wallet & Earnings */}

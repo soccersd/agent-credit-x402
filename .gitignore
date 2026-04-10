@@ -7,6 +7,7 @@ kill.sh
 PRODUCTION_FEATURES.md
 structure.md
 summary.md
+.qoder/
 
 # Backend
 backend/target/

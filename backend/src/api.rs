@@ -89,6 +89,7 @@ pub fn create_router(
         .route("/api/status", get(get_status))
         .route("/api/trigger_loop", post(trigger_loop))
         .route("/api/credit_score", post(calculate_credit_score))
+        .route("/api/credit_score/history", get(get_credit_score_history))
         .route("/api/loans", get(get_active_loans))
         .route("/api/loans", post(create_loan))
         .route("/api/loans/:loan_id/repay", post(repay_loan))
@@ -445,6 +446,28 @@ async fn get_collateral_report(
 ) -> Json<ApiResponse<Option<crate::engine::collateral_mgr::CollateralHealthReport>>> {
     let state = state.lock().await;
     Json(ApiResponse::ok(state.collateral_report.clone()))
+}
+
+/// Get credit score history
+async fn get_credit_score_history(
+    State((_state, _command_tx, database)): State<AppState>,
+) -> Json<ApiResponse<Vec<crate::db::CreditScoreHistoryRecord>>> {
+    // Get wallet address from config or use default
+    let wallet_address = std::env::var("AGENT_WALLET_ADDRESS")
+        .unwrap_or_else(|_| "0x21263042d143CD60833E292b735B66Eca5605B28".to_string());
+
+    match database.get_credit_score_history(&wallet_address, Some(50)).await {
+        Ok(history) => {
+            // Reverse to get oldest first for chart display
+            let mut history = history;
+            history.reverse();
+            Json(ApiResponse::ok(history))
+        }
+        Err(e) => {
+            tracing::error!("Failed to get credit score history: {}", e);
+            Json(ApiResponse::error(&format!("Failed to get history: {}", e)))
+        }
+    }
 }
 
 /// Start the agent loop

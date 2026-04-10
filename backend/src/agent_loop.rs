@@ -877,6 +877,27 @@ impl AgentLoop {
                         ..state
                     };
                     db.save_agent_state(&updated_state).await?;
+                    
+                    // Save to credit score history
+                    let history_record = crate::db::CreditScoreHistoryRecord {
+                        id: 0, // AUTOINCREMENT
+                        wallet_address: score.wallet_address.clone(),
+                        score: score.score as i64,
+                        max_score: score.max_score as i64,
+                        grade: score.grade.clone(),
+                        on_chain_history_score: score.on_chain_history_score as i64,
+                        portfolio_value_score: score.portfolio_value_score as i64,
+                        repayment_history_score: score.repayment_history_score as i64,
+                        reputation_score: score.reputation_score as i64,
+                        identity_bonus: score.identity_bonus as i64,
+                        risk_adjustment: score.risk_adjustment,
+                        max_borrow_limit: score.max_borrow_limit,
+                        created_at: score.calculated_at.clone(),
+                    };
+                    
+                    if let Err(e) = db.save_credit_score(&history_record).await {
+                        tracing::error!("Failed to save credit score history: {}", e);
+                    }
                 }
             }
             AgentEvent::CollateralAlert(report) => {

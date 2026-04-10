@@ -13,6 +13,7 @@ export default function LandingPage() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLaunching, setIsLaunching] = useState(false);
+  const [isOpeningDocs, setIsOpeningDocs] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -25,10 +26,17 @@ export default function LandingPage() {
     }, 1500);
   };
 
+  const handleOpenDocs = () => {
+    setIsOpeningDocs(true);
+    setTimeout(() => {
+      router.push("/docs");
+    }, 1200);
+  };
+
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased transition-colors duration-300">
       {/* Loading Overlay */}
-      {isLaunching && (
+      {(isLaunching || isOpeningDocs) && (
         <div className="fixed inset-0 z-[100] bg-[var(--background)]/95 backdrop-blur-sm flex flex-col items-center justify-center gap-6">
           <div className="banter-loader">
             <div className="banter-loader__box"></div>
@@ -42,7 +50,7 @@ export default function LandingPage() {
             <div className="banter-loader__box"></div>
           </div>
           <div className="text-[#ff2a2a] font-mono text-sm animate-pulse">
-            Initializing AgentCredit x402...
+            {isLaunching ? "Initializing AgentCredit x402..." : "Loading Documentation..."}
           </div>
         </div>
       )}
@@ -84,8 +92,9 @@ export default function LandingPage() {
                 ECONOMY LOOP
               </button>
               <button
-                onClick={() => router.push("/docs")}
-                className="hover:text-white transition-colors"
+                onClick={handleOpenDocs}
+                disabled={isOpeningDocs}
+                className="hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 DOCS
               </button>
@@ -561,7 +570,10 @@ export default function LandingPage() {
               <h4 className="text-white text-sm font-bold mb-4">Platform</h4>
               <ul className="space-y-2 text-xs text-gray-500 font-mono">
                 <li>
-                  <span className="hover:text-[#ff2a2a] cursor-pointer">
+                  <span 
+                    onClick={handleOpenDocs}
+                    className="hover:text-[#ff2a2a] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     Documentation
                   </span>
                 </li>

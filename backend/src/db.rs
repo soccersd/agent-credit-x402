@@ -1,4 +1,5 @@
 use chrono::Utc;
+use serde::Serialize;
 use sqlx::{sqlite::SqlitePoolOptions, FromRow, SqlitePool};
 use std::path::Path;
 use tracing::info;
@@ -119,6 +120,41 @@ impl Database {
 
         sqlx::query(
             r#"CREATE INDEX IF NOT EXISTS idx_events_timestamp ON agent_events(timestamp)"#,
+        )
+        .execute(&self.pool)
+        .await?;
+
+        // Credit score history table
+        sqlx::query(
+            r#"
+            CREATE TABLE IF NOT EXISTS credit_score_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                wallet_address TEXT NOT NULL,
+                score INTEGER NOT NULL,
+                max_score INTEGER NOT NULL DEFAULT 1000,
+                grade TEXT NOT NULL,
+                on_chain_history_score INTEGER NOT NULL,
+                portfolio_value_score INTEGER NOT NULL,
+                repayment_history_score INTEGER NOT NULL,
+                reputation_score INTEGER NOT NULL DEFAULT 0,
+                identity_bonus INTEGER NOT NULL DEFAULT 0,
+                risk_adjustment REAL NOT NULL,
+                max_borrow_limit REAL NOT NULL,
+                created_at TEXT NOT NULL DEFAULT (datetime('now'))
+            )
+            "#,
+        )
+        .execute(&self.pool)
+        .await?;
+
+        sqlx::query(
+            r#"CREATE INDEX IF NOT EXISTS idx_credit_history_wallet ON credit_score_history(wallet_address)"#,
+        )
+        .execute(&self.pool)
+        .await?;
+
+        sqlx::query(
+            r#"CREATE INDEX IF NOT EXISTS idx_credit_history_created ON credit_score_history(created_at)"#,
         )
         .execute(&self.pool)
         .await?;
@@ -375,4 +411,116 @@ pub struct EventRecord {
     pub event_data_json: String,
     pub timestamp: String,
     pub created_at: String,
+}
+
+/// Credit score history record
+#[derive(Debug, Clone, FromRow, Serialize)]
+pub struct CreditScoreHistoryRecord {
+    pub id: i64,
+    pub wallet_address: String,
+    pub score: i64,
+    pub max_score: i64,
+    pub grade: String,
+    pub on_chain_history_score: i64,
+    pub portfolio_value_score: i64,
+    pub repayment_history_score: i64,
+    pub reputation_score: i64,
+    pub identity_bonus: i64,
+    pub risk_adjustment: f64,
+    pub max_borrow_limit: f64,
+    pub created_at: String,
+}
+
+impl Database {
+    // === CREDIT SCORE HISTORY ===
+
+    /// Save credit score to history
+    pub async fn save_credit_score(&self, record: &CreditScoreHistoryRecord) -> Result<(), anyhow::Error> {
+        sqlx::query(
+            r#"
+            INSERT INTO credit_score_history (
+                wallet_address, score, max_score, grade,
+                on_chain_history_score, portfolio_value_score, repayment_history_score,
+                reputation_score, identity_bonus, risk_adjustment, max_borrow_limit,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            "#,
+        )
+        .bind(&record.wallet_address)
+        .bind(record.score)
+        .bind(record.max_score)
+        .bind(&record.grade)
+        .bind(record.on_chain_history_score)
+        .bind(record.portfolio_value_score)
+        .bind(record.repayment_history_score)
+        .bind(record.reputation_score)
+        .bind(record.identity_bonus)
+        .bind(record.risk_adjustment)
+        .bind(record.max_borrow_limit)
+        .bind(&record.created_at)
+        .execute(&self.pool)
+        .await?;
+
+        info!("Saved credit score history: score={}, grade={}", record.score, record.grade);
+        Ok(())
+    }
+
+    /// Get credit score history for a wallet, ordered by time (newest first)
+    pub async fn get_credit_score_history(
+        &self,
+        wallet_address: &str,
+        limit: Option<i64>,
+    ) -> Result<Vec<CreditScoreHistoryRecord>, anyhow::Error> {
+        let limit = limit.unwrap_or(100);
+        
+        let records = sqlx::query_as::<_, CreditScoreHistoryRecord>(
+            r#"
+            SELECT 
+                id, wallet_address, score, max_score, grade,
+                on_chain_history_score, portfolio_value_score, repayment_history_score,
+                reputation_score, identity_bonus, risk_adjustment, max_borrow_limit,
+                created_at
+            FROM credit_score_history
+            WHERE wallet_address = ?
+            ORDER BY created_at DESC
+            LIMIT ?
+            "#,
+        )
+        .bind(wallet_address)
+        .bind(limit)
+        .fetch_all(&self.pool)
+        .await?;
+
+        Ok(records)
+    }
+
+    /// Get credit score history with pagination
+    pub async fn get_credit_score_history_paginated(
+        &self,
+        wallet_address: &str,
+        offset: i64,
+        limit: i64,
+    ) -> Result<Vec<CreditScoreHistoryRecord>, anyhow::Error> {
+        let records = sqlx::query_as::<_, CreditScoreHistoryRecord>(
+            r#"
+            SELECT 
+                id, wallet_address, score, max_score, grade,
+                on_chain_history_score, portfolio_value_score, repayment_history_score,
+                reputation_score, identity_bonus, risk_adjustment, max_borrow_limit,
+                created_at
+            FROM credit_score_history
+            WHERE wallet_address = ?
+            ORDER BY created_at DESC
+            LIMIT ? OFFSET ?
+            "#,
+        )
+        .bind(wallet_address)
+        .bind(limit)
+        .bind(offset)
+        .fetch_all(&self.pool)
+        .await?;
+
+        Ok(records)
+    }
 }
