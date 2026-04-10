@@ -11,14 +11,14 @@ const Icon = ({ icon, className = "" }: { icon: string; className?: string }) =>
 export default function LandingPage() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLaunching, setIsLaunching] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  const handleLaunchDashboard = () => {
-    setIsLoading(true);
+  const handleLaunchApp = () => {
+    setIsLaunching(true);
     setTimeout(() => {
       router.push("/dashboard");
     }, 1500);
@@ -27,7 +27,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#e5e5e5] antialiased selection:bg-[#ff2a2a] selection:text-white">
       {/* Loading Overlay */}
-      {isLoading && (
+      {isLaunching && (
         <div className="fixed inset-0 z-[100] bg-[#050505]/95 backdrop-blur-sm flex flex-col items-center justify-center gap-6">
           <div className="banter-loader">
             <div className="banter-loader__box"></div>
@@ -83,18 +83,12 @@ export default function LandingPage() {
                 ECONOMY LOOP
               </button>
               <button
-                onClick={() => document.getElementById("docs")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => router.push("/docs")}
                 className="hover:text-white transition-colors"
               >
                 DOCS
               </button>
             </div>
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="hover:bg-[#ff2a2a] transition-colors uppercase text-xs font-bold text-black tracking-wider font-mono bg-white pt-2 pr-5 pb-2 pl-5"
-            >
-              LAUNCH APP
-            </button>
           </div>
         </div>
       </nav>
@@ -131,11 +125,11 @@ export default function LandingPage() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <button
-                onClick={handleLaunchDashboard}
-                disabled={isLoading}
-                className="h-14 px-8 btn-primary flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleLaunchApp}
+                disabled={isLaunching}
+                className="h-14 px-8 btn-primary flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? "Initializing..." : "Launch Dashboard"}
+                {isLaunching ? "Initializing..." : "Launch Dashboard"}
               </button>
               <button
                 onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}
@@ -526,13 +520,14 @@ export default function LandingPage() {
           </p>
           <div className="flex justify-center gap-4">
             <button
-              onClick={() => router.push("/dashboard")}
-              className="h-12 px-8 bg-white text-black hover:bg-gray-200 transition-colors font-mono text-sm font-bold uppercase tracking-wide"
+              onClick={handleLaunchApp}
+              disabled={isLaunching}
+              className="h-12 px-8 bg-white text-black hover:bg-gray-200 transition-colors font-mono text-sm font-bold uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Launch Dashboard
+              {isLaunching ? "Loading..." : "Launch Dashboard"}
             </button>
             <button
-              onClick={() => window.open("https://github.com", "_blank")}
+              onClick={() => window.open("https://github.com/soccersd/agent-credit-x402", "_blank")}
               className="h-12 px-8 bg-transparent border border-white/20 text-white hover:border-[#ff2a2a] hover:text-[#ff2a2a] transition-colors font-mono text-sm font-bold uppercase tracking-wide"
             >
               View on GitHub
