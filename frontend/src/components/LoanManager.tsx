@@ -9,8 +9,12 @@ import {
   Clock,
   DollarSign,
   Loader2,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { ActiveLoan } from "@/lib/api";
+import { LoanListSkeleton } from "@/components/ui/Skeleton";
+import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 
 interface LoanManagerProps {
   loans: ActiveLoan[];
@@ -21,7 +25,6 @@ interface LoanManagerProps {
   maxBorrowLimit?: number;
 }
 
-// Helper functions for status display
 function getStatusIcon(status: string) {
   switch (status) {
     case "Active":
@@ -68,8 +71,10 @@ const LoanManager: React.FC<LoanManagerProps> = ({
   const [loanAmount, setLoanAmount] = useState<string>("1");
   const [loanDuration, setLoanDuration] = useState<string>("3600");
   const [selectedToken, setSelectedToken] = useState("USDC");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
-  const handleCreateLoan = (e: React.FormEvent) => {
+  const handleCreateLoan = async (e: React.FormEvent) => {
     e.preventDefault();
     const amount = parseFloat(loanAmount);
     const duration = parseInt(loanDuration);
@@ -77,28 +82,37 @@ const LoanManager: React.FC<LoanManagerProps> = ({
     if (isNaN(amount) || isNaN(duration)) return;
     if (amount < 0.1 || amount > maxBorrowLimit) return;
 
-    onCreateLoan(amount, selectedToken, duration);
-    setShowCreateForm(false);
-    setLoanAmount("1");
-    setLoanDuration("3600");
+    setIsSubmitting(true);
+    try {
+      onCreateLoan(amount, selectedToken, duration);
+      setShowCreateForm(false);
+      setLoanAmount("1");
+      setLoanDuration("3600");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const activeLoans = loans.filter(
-    (l) => l.status === "Active" || l.status === "Repaying",
+    (l) => l.status === "Active" || l.status === "Repaying"
   );
 
   const completedLoans = loans.filter(
     (l) =>
       l.status === "Completed" ||
       l.status === "Defaulted" ||
-      l.status === "Liquidated",
+      l.status === "Liquidated"
   );
 
+  if (isLoading && loans.length === 0) {
+    return <LoanListSkeleton />;
+  }
+
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
+    <div className="bg-[var(--panel)] border border-[var(--border)] rounded-lg p-6 transition-colors duration-300 animate-fade-in-up">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-          <DollarSign className="w-5 h-5" />
+          <DollarSign className="w-5 h-5 text-[#ff2a2a]" />
           Loan Manager
           <span className="text-sm text-muted-foreground font-normal">
             ({activeLoans.length} active)
@@ -107,7 +121,7 @@ const LoanManager: React.FC<LoanManagerProps> = ({
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}
           disabled={isLoading}
-          className="flex items-center gap-2 px-3 py-1.5 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
         >
           <PlusCircle className="w-4 h-4" />
           New Loan
@@ -118,7 +132,7 @@ const LoanManager: React.FC<LoanManagerProps> = ({
       {showCreateForm && (
         <form
           onSubmit={handleCreateLoan}
-          className="mb-6 p-4 bg-muted/50 border border-border rounded-lg"
+          className="mb-6 p-4 bg-muted/50 border border-[var(--border)] rounded-lg animate-scale-in"
         >
           <h3 className="text-sm font-medium text-foreground mb-4">
             Create New Loan
@@ -135,7 +149,7 @@ const LoanManager: React.FC<LoanManagerProps> = ({
                 max={maxBorrowLimit}
                 value={loanAmount}
                 onChange={(e) => setLoanAmount(e.target.value)}
-                className="w-full px-3 py-2 bg-background border border-border rounded-md text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-3 py-2 bg-background border border-[var(--border)] rounded-md text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                 required
               />
               <p className="text-xs text-muted-foreground mt-1">
@@ -149,7 +163,7 @@ const LoanManager: React.FC<LoanManagerProps> = ({
               <select
                 value={selectedToken}
                 onChange={(e) => setSelectedToken(e.target.value)}
-                className="w-full px-3 py-2 bg-background border border-border rounded-md text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-3 py-2 bg-background border border-[var(--border)] rounded-md text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
               >
                 <option value="USDC">USDC</option>
                 <option value="USDT">USDT</option>
@@ -167,7 +181,7 @@ const LoanManager: React.FC<LoanManagerProps> = ({
                 max="86400"
                 value={loanDuration}
                 onChange={(e) => setLoanDuration(e.target.value)}
-                className="w-full px-3 py-2 bg-background border border-border rounded-md text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-3 py-2 bg-background border border-[var(--border)] rounded-md text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                 required
               />
               <p className="text-xs text-muted-foreground mt-1">
@@ -178,15 +192,15 @@ const LoanManager: React.FC<LoanManagerProps> = ({
           <div className="flex gap-2 mt-4">
             <button
               type="submit"
-              disabled={isLoading}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              disabled={isLoading || isSubmitting}
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <PlusCircle className="w-4 h-4" />
               )}
-              Create Loan
+              {isSubmitting ? "Creating..." : "Create Loan"}
             </button>
             <button
               type="button"
@@ -206,41 +220,56 @@ const LoanManager: React.FC<LoanManagerProps> = ({
             Active Loans
           </h3>
           <div className="space-y-3">
-            {activeLoans.map((loan) => (
+            {activeLoans.map((loan, index) => (
               <LoanCard
                 key={loan.loan_id}
                 loan={loan}
                 onRepay={() => onRepayLoan(loan.loan_id)}
                 onCancel={() => onCancelLoan(loan.loan_id)}
+                animationDelay={index * 100}
               />
             ))}
           </div>
         </div>
       )}
 
-      {/* Completed Loans */}
+      {/* Completed Loans (collapsible) */}
       {completedLoans.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium text-foreground mb-3">
+          <button
+            onClick={() => setShowHistory(!showHistory)}
+            className="flex items-center gap-2 text-sm font-medium text-foreground mb-3 hover:text-primary transition-colors group"
+          >
             Loan History
-          </h3>
-          <div className="space-y-3">
-            {completedLoans.slice(0, 5).map((loan) => (
-              <LoanCard
-                key={loan.loan_id}
-                loan={loan}
-                onRepay={() => { }}
-                onCancel={() => { }}
-                compact
-              />
-            ))}
-          </div>
+            <span className="text-muted-foreground font-normal text-xs">
+              ({completedLoans.length})
+            </span>
+            {showHistory ? (
+              <ChevronUp className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            )}
+          </button>
+          {showHistory && (
+            <div className="space-y-3 animate-fade-in-up">
+              {completedLoans.map((loan, index) => (
+                <LoanCard
+                  key={loan.loan_id}
+                  loan={loan}
+                  onRepay={() => {}}
+                  onCancel={() => {}}
+                  compact
+                  animationDelay={index * 50}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
 
       {/* Empty State */}
       {loans.length === 0 && !showCreateForm && (
-        <div className="text-center py-12 text-muted-foreground">
+        <div className="text-center py-12 text-muted-foreground animate-fade-in">
           <DollarSign className="w-12 h-12 mx-auto mb-3 opacity-50" />
           <p className="text-sm">No loans yet</p>
           <p className="text-xs mt-1">
@@ -252,12 +281,12 @@ const LoanManager: React.FC<LoanManagerProps> = ({
   );
 };
 
-// Individual loan card component
 interface LoanCardProps {
   loan: ActiveLoan;
   onRepay: () => void;
   onCancel: () => void;
   compact?: boolean;
+  animationDelay?: number;
 }
 
 const LoanCard: React.FC<LoanCardProps> = ({
@@ -265,18 +294,22 @@ const LoanCard: React.FC<LoanCardProps> = ({
   onRepay,
   onCancel,
   compact = false,
+  animationDelay = 0,
 }) => {
   const repaymentPercentage =
     loan.principal > 0
       ? Math.min(
-        100,
-        (loan.repaid_amount / (loan.principal * (1 + loan.interest_rate))) *
-        100,
-      ).toFixed(1)
+          100,
+          (loan.repaid_amount / (loan.principal * (1 + loan.interest_rate))) *
+            100
+        ).toFixed(1)
       : "0";
 
   return (
-    <div className="p-4 bg-background border border-border rounded-lg">
+    <div
+      className="p-4 bg-background border border-[var(--border)] rounded-lg hover:border-primary/30 transition-all duration-200 animate-fade-in-up"
+      style={{ animationDelay: `${animationDelay}ms` }}
+    >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           {getStatusIcon(loan.status)}
@@ -285,9 +318,7 @@ const LoanCard: React.FC<LoanCardProps> = ({
               {loan.loan_id.slice(0, 8)}...
             </p>
             <span
-              className={`inline-block px-2 py-0.5 text-xs rounded-full border ${getStatusColor(
-                loan.status,
-              )}`}
+              className={`inline-block px-2 py-0.5 text-xs rounded-full border ${getStatusColor(loan.status)}`}
             >
               {loan.status}
             </span>
@@ -314,30 +345,29 @@ const LoanCard: React.FC<LoanCardProps> = ({
 
       {!compact && (
         <>
-          {/* Loan Details */}
           <div className="grid grid-cols-2 gap-3 text-xs mb-3">
             <div>
               <span className="text-muted-foreground">Principal</span>
               <p className="text-foreground font-medium">
-                {loan.principal.toFixed(2)} USDC
+                <AnimatedCounter value={loan.principal} decimals={2} suffix=" USDC" />
               </p>
             </div>
             <div>
               <span className="text-muted-foreground">Outstanding</span>
               <p className="text-foreground font-medium">
-                {loan.outstanding.toFixed(2)} USDC
+                <AnimatedCounter value={loan.outstanding} decimals={2} suffix=" USDC" />
               </p>
             </div>
             <div>
               <span className="text-muted-foreground">Interest Rate</span>
               <p className="text-foreground font-medium">
-                {(loan.interest_rate * 100).toFixed(1)}%
+                <AnimatedCounter value={loan.interest_rate * 100} decimals={1} suffix="%" />
               </p>
             </div>
             <div>
               <span className="text-muted-foreground">Collateral</span>
               <p className="text-foreground font-medium">
-                {loan.collateral_amount.toFixed(2)} {loan.collateral_token}
+                <AnimatedCounter value={loan.collateral_amount} decimals={2} suffix={` ${loan.collateral_token}`} />
               </p>
             </div>
           </div>
@@ -348,22 +378,20 @@ const LoanCard: React.FC<LoanCardProps> = ({
               <span className="text-muted-foreground">Repayment Progress</span>
               <span className="text-foreground">{repaymentPercentage}%</span>
             </div>
-            <div className="w-full bg-muted rounded-full h-1.5">
+            <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
               <div
-                className="bg-primary h-1.5 rounded-full transition-all"
+                className="bg-primary h-1.5 rounded-full transition-all duration-700 ease-out"
                 style={{ width: `${repaymentPercentage}%` }}
               />
             </div>
           </div>
 
-          {/* Stream Rate */}
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>Stream Rate</span>
             <span>{loan.stream_rate_per_sec.toFixed(4)} USDC/sec</span>
           </div>
 
-          {/* Timestamps */}
-          <div className="mt-2 pt-2 border-t border-border flex justify-between text-xs text-muted-foreground">
+          <div className="mt-2 pt-2 border-t border-[var(--border)] flex justify-between text-xs text-muted-foreground">
             <span>Created: {new Date(loan.created_at).toLocaleString()}</span>
             <span>Due: {new Date(loan.due_at).toLocaleString()}</span>
           </div>
@@ -375,13 +403,13 @@ const LoanCard: React.FC<LoanCardProps> = ({
           <div>
             <span className="text-muted-foreground">Principal</span>
             <p className="text-foreground font-medium">
-              {loan.principal.toFixed(2)} USDC
+              <AnimatedCounter value={loan.principal} decimals={2} suffix=" USDC" />
             </p>
           </div>
           <div>
             <span className="text-muted-foreground">Repaid</span>
             <p className="text-foreground font-medium">
-              {loan.repaid_amount.toFixed(2)} USDC
+              <AnimatedCounter value={loan.repaid_amount} decimals={2} suffix=" USDC" />
             </p>
           </div>
           <div>
