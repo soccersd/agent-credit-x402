@@ -13,6 +13,34 @@ use std::sync::Arc;
 use tracing::{info, warn, error};
 use uuid::Uuid;
 
+/// x402 Lending Engine for autonomous AI agent micro-lending
+/// 
+/// # Onchain OS Integration
+/// 
+/// This module integrates with the **okx-x402-payment** skill:
+/// - CLI Command: `onchainos x402 create-mandate --rate <rate> --duration <secs>`
+/// - Purpose: x402 mandate creation, TEE signing, streaming repayments
+/// - Skill File: `.agents/skills/okx-x402-payment/SKILL.md`
+/// 
+/// # Key Features
+/// 
+/// - **x402 Payment Mandates**: Create streaming payment mandates for loan repayments
+/// - **TEE Signing**: Secure mandate signing via Trusted Execution Environment
+/// - **Streaming Repayment**: Continuous payment streams instead of lump sums
+/// - **Auto-liquidation**: Liquidate positions when collateral becomes unsafe
+/// 
+/// # Architecture
+/// 
+/// Production integration uses Onchain OS CLI:
+/// ```bash
+/// # Create payment mandate
+/// onchainos x402 create-mandate \
+///   --rate 0.001 \
+///   --duration 86400 \
+///   --token USDC \
+///   --chain xlayer
+/// ```
+
 /// Loan status in the system
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum LoanStatus {

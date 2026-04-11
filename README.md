@@ -118,13 +118,56 @@ This project deploys **one autonomous agent** — the **Credit Agent**:
 
 ## 📚 Onchain OS & Uniswap Skill Usage
 
+This project integrates with **5 Onchain OS skills** and **2 Uniswap skills** for autonomous AI agent lending:
+
+### Onchain OS Skills
+
+| # | Skill | Module | CLI Command | Purpose |
+|---|-------|--------|-------------|---------|
+| 1 | **okx-x402-payment** | `x402_lending.rs` | `onchainos x402 create-mandate` | x402 mandate creation, TEE signing, streaming repayments |
+| 2 | **okx-onchain-gateway** | `credit_scoring.rs` | `onchainos wallet portfolio --address <wallet>` | Wallet analytics, transaction history for credit scoring |
+| 3 | **okx-dex-market** | `collateral_mgr.rs` | `onchainos dex price --token USDC --chain xlayer` | Real-time token prices, market depth for collateral valuation |
+| 4 | **okx-wallet-portfolio** | `agent_loop.rs` | `onchainos wallet balance --address <wallet>` | Monitor agent wallet balance and earnings |
+| 5 | **okx-defi-invest** | `collateral_mgr.rs` | `onchainos defi invest` | DeFi yield opportunities for collateral optimization |
+
+### Uniswap Skills
+
 | # | Skill | Module | Purpose |
 |---|-------|--------|---------|
-| 1 | **okx-x402-payment** | `x402_lending.rs` | x402 mandate creation, TEE signing, streaming |
-| 2 | **okx-onchain-gateway** | `credit_scoring.rs` | Wallet analytics, transaction history |
-| 3 | **okx-dex-market** | `collateral_mgr.rs` | Real-time token prices, market depth |
-| 4 | **swap-integration** | `collateral_mgr.rs` | Uniswap swaps for collateral rebalancing |
-| 5 | **liquidity-planner** | `collateral_mgr.rs` | Slippage protection, depth checks |
+| 1 | **swap-integration** | `collateral_mgr.rs` | Uniswap swaps for collateral rebalancing when positions become unhealthy |
+| 2 | **liquidity-planner** | `collateral_mgr.rs` | Slippage protection, depth checks for large collateral moves |
+
+### Integration Architecture
+
+The codebase is designed to work with **both interfaces**:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              AgentCredit x402 Backend                   │
+│                                                         │
+│  ┌──────────────────┐    ┌──────────────────────────┐  │
+│  │ REST API Mode    │    │ Onchain OS CLI Mode      │  │
+│  │ (Development)    │◀──▶│ (Production)             │  │
+│  │                  │    │                          │  │
+│  │ • Direct HTTP    │    │ • onchainos commands     │  │
+│  │ • Mock data      │    │ • TEE signing            │  │
+│  │ • Fast testing   │    │ • Standardized interface │  │
+│  └──────────────────┘    └──────────────────────────┘  │
+│                                                         │
+│  Switch mode: USE_ONCHAIN_OS_CLI=true in .env          │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Skill Files Location
+
+All skill definitions are stored in `.agents/skills/` directory:
+- `.agents/skills/okx-x402-payment/SKILL.md` - x402 payment protocol
+- `.agents/skills/okx-onchain-gateway/SKILL.md` - Blockchain gateway
+- `.agents/skills/okx-dex-market/SKILL.md` - DEX market data
+- `.agents/skills/okx-wallet-portfolio/SKILL.md` - Wallet analytics
+- `.agents/skills/okx-defi-invest/SKILL.md` - DeFi investing
+- `.agents/skills/swap-integration/SKILL.md` - Uniswap integration
+- `.agents/skills/liquidity-planner/SKILL.md` - Liquidity planning
 
 ---
 

@@ -7,6 +7,48 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tracing::{info, warn};
 
+/// Collateral Management Engine for monitoring and optimizing agent positions
+/// 
+/// # Onchain OS Integration
+/// 
+/// This module integrates with multiple Onchain OS skills:
+/// 
+/// ## okx-dex-market
+/// - CLI Command: `onchainos dex price --token USDC --chain xlayer`
+/// - Purpose: Real-time token prices, market depth for collateral valuation
+/// - Skill File: `.agents/skills/okx-dex-market/SKILL.md`
+/// 
+/// ## okx-defi-invest
+/// - CLI Command: `onchainos defi invest`
+/// - Purpose: DeFi yield opportunities for collateral optimization
+/// - Skill File: `.agents/skills/okx-defi-invest/SKILL.md`
+/// 
+/// ## swap-integration (Uniswap)
+/// - Purpose: Uniswap swaps for collateral rebalancing when positions become unhealthy
+/// - Skill File: `.agents/skills/swap-integration/SKILL.md`
+/// 
+/// ## liquidity-planner (Uniswap)
+/// - Purpose: Slippage protection, depth checks for large collateral moves
+/// - Skill File: `.agents/skills/liquidity-planner/SKILL.md`
+/// 
+/// # Key Features
+/// 
+/// - **Real-time Price Monitoring**: Track collateral values across multiple tokens
+/// - **Health Factor Calculation**: Monitor position safety with automated alerts
+/// - **Auto-rebalancing**: Suggest token swaps to maintain healthy positions
+/// - **Slippage Protection**: Ensure safe execution of large collateral moves
+/// 
+/// # Architecture
+/// 
+/// Production integration uses Onchain OS CLI:
+/// ```bash
+/// # Get token price
+/// onchainos dex price --token USDC --chain xlayer
+/// 
+/// # Check DeFi opportunities
+/// onchainos defi invest
+/// ```
+
 /// Collateral position details
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CollateralPosition {

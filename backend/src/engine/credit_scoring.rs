@@ -38,6 +38,21 @@ struct OkxGatewayResponse {
 }
 
 /// Credit scoring engine that evaluates agent creditworthiness
+/// 
+/// # Onchain OS Integration
+/// 
+/// This module integrates with the **okx-onchain-gateway** skill:
+/// - CLI Command: `onchainos wallet portfolio --address <wallet>`
+/// - Purpose: Fetch wallet analytics, transaction history for credit scoring
+/// - Skill File: `.agents/skills/okx-onchain-gateway/SKILL.md`
+/// 
+/// # Architecture
+/// 
+/// The codebase supports two modes:
+/// 1. **REST API Mode** (current) - Direct HTTP calls to OKX APIs for development
+/// 2. **Onchain OS CLI Mode** (production) - Uses `onchainos` commands via subprocess
+/// 
+/// To enable Onchain OS CLI mode, set `USE_ONCHAIN_OS_CLI=true` in `.env`
 pub struct CreditScorer {
     config: Arc<Config>,
     client: Client,
